@@ -110,7 +110,7 @@ def xfoil(NACA, PPAR, AoA, flagAirfoil):
         root.destroy()
 
         head, tail = ntpath.split(root.fileName)
-        airfoilName = tail[0 : len(tail) - 4]
+        airfoilName = tail[0: len(tail) - 4]
         xFoilResults[0] = airfoilName
 
     saveFlnm = "Save_" + airfoilName + ".txt"
