@@ -1,5 +1,27 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import minimize
+
+
+def velocidad_en_punto(x, y, epsilon=1e-5):
+    v_x = U + (Lambda / (2 * np.pi)) * (
+        (x - fuente_x) / ((x - fuente_x) ** 2 + (y - fuente_y) ** 2 + epsilon)
+    )
+    for i in range(n):
+        v_x += (intensidad_sumidero / (2 * np.pi)) * (
+            (x - sumideros_x[i])
+            / ((x - sumideros_x[i]) ** 2 + (y - sumideros_y[i]) ** 2 + epsilon)
+        )
+    v_y = (Lambda / (2 * np.pi)) * (
+        (y - fuente_y) / ((x - fuente_x) ** 2 + (y - fuente_y) ** 2 + epsilon)
+    )
+    for i in range(n):
+        v_y += (intensidad_sumidero / (2 * np.pi)) * (
+            (y - sumideros_y[i])
+            / ((x - sumideros_x[i]) ** 2 + (y - sumideros_y[i]) ** 2 + epsilon)
+        )
+    return np.sqrt(v_x**2 + v_y**2)
+
 
 # Datos del perfil NACA 0024
 perfil_x = np.array(
@@ -86,9 +108,10 @@ U = 1.0  # velocidad de corriente libre
 Lambda = 0.4  # intensidad de la fuente
 n = 10  # número de sumideros
 c = 1.0  # longitud de la cuerda
+epsilon = 1e-5  # valor pequeño para evitar divisiones por cero
 
 # Posiciones de la fuente y los sumideros
-fuente_x, fuente_y = 0.05, 0.0
+fuente_x, fuente_y = 0.08, 0.0
 sumideros_x = np.linspace(0.1, c, n)
 sumideros_y = np.zeros(n)
 intensidad_sumidero = -Lambda / n
@@ -148,32 +171,5 @@ plt.title(
 plt.xlabel("x")
 plt.ylabel("y")
 plt.legend()
-
-# Cálculo de la distribución de velocidad sobre el perfil
-velocidad_x = U - (Lambda / (2 * np.pi)) / perfil_x
-velocidad_y = np.zeros_like(
-    perfil_x
-)  # simplificación para flujo potencial sin ángulo
-velocidad_total = np.sqrt(velocidad_x * 2 + velocidad_y * 2)
-
-# Cálculo del coeficiente de presión Cp
-Cp = 1 - (velocidad_total / U) ** 2
-
-# Graficar distribución de velocidad sobre el perfil
-plt.figure()
-plt.plot(perfil_x, velocidad_total, "b-", linewidth=2)
-plt.xlabel("Posición x sobre el perfil")
-plt.ylabel("Velocidad sobre el perfil")
-plt.title("Distribución de Velocidad sobre el perfil NACA 0024")
-
-# Graficar Cp sobre el perfil
-plt.figure()
-plt.plot(perfil_x, Cp, "r-", linewidth=2)
-plt.xlabel("Posición x sobre el perfil")
-plt.ylabel("Coeficiente de presión Cp")
-plt.title(
-    "Distribución del Coeficiente de Presión Cp sobre el perfil NACA 0024"
-)
-plt.gca().invert_yaxis()  # Invertir el eje y para visualizar Cp correctamente
 
 plt.show()
