@@ -101,7 +101,7 @@ def xfoil(NACA, PPAR, AoA, flagAirfoil):
         root = Tk()
         ftypes = [("dat file", "*.dat")]
         ttl = "Select Airfoil File"
-        dir1 = "/Airfoil_DAT_Selig/"
+        dir1 = "/airfoils/"
         root.withdraw()
         root.update()
         root.fileName = askopenfilename(
@@ -128,7 +128,7 @@ def xfoil(NACA, PPAR, AoA, flagAirfoil):
     if flagAirfoil[0] == 1:
         fid.write("NACA " + NACA + "\n")
     elif flagAirfoil[1] == 1:
-        fid.write("LOAD " + "./Airfoil_DAT_Selig/" + tail + "\n")
+        fid.write("LOAD " + "./airfoils/" + tail + "\n")
 
     fid.write("PPAR\n")
     fid.write("N " + PPAR[0] + "\n")
